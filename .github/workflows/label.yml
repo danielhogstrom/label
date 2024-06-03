@@ -13,9 +13,8 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Add label to PR
-      uses: actions/github-script@v6
+      uses: actions/github-script@v7
       with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const prNumber = context.payload.pull_request.number;
           const targetBranch = context.payload.pull_request.base.ref;
