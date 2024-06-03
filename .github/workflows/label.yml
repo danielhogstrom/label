@@ -15,8 +15,7 @@ jobs:
     - name: Extract target branch name
       id: extract-branch
       run: |
-        TARGET_BRANCH=$(jq -r ".pull_request.base.ref" "$GITHUB_EVENT_PATH")
-        echo "::set-output name=target_branch::$TARGET_BRANCH"
+        echo "::set-output name=target_branch::${GITHUB_REF#refs/heads/}"
 
     - name: Add label to PR
       run: |
