@@ -12,22 +12,18 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Extract target branch name
-      id: extract-branch
-      run: |
-        echo "::set-output name=target_branch::${GITHUB_REF#refs/heads/}"
-
     - name: Add label to PR
-      run: |
-        const github = require('@actions/github');
-        const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-        const { owner, repo } = github.context.repo;
-        const pr_number = github.context.payload.pull_request.number;
-        const targetBranch = process.env.TARGET_BRANCH;
+      uses: actions/github-script@v6
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const { context, github } = require('@actions/github');
+          const pr_number = context.payload.pull_request.number;
+          const targetBranch = context.payload.pull_request.base.ref;
 
-        octokit.issues.addLabels({
-          owner,
-          repo,
-          issue_number: pr_number,
-          labels: [targetBranch]
-        });
+          github.rest.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: pr_number,
+            labels: [targetBranch]
+          });
