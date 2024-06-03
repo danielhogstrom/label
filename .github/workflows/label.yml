@@ -19,10 +19,12 @@ jobs:
       uses: actions/github-script@v7
       with:
         script: |
+          const prNumber = context.payload.pull_request.number;
           const targetBranch = context.payload.pull_request.base.ref;
 
           github.rest.issues.addLabels({
             owner: context.repo.owner,
             repo: context.repo.repo,
+            issue_number: prNumber,
             labels: [targetBranch]
           });
