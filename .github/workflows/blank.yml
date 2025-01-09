@@ -1,16 +1,8 @@
 name: Enforce Two Approvals
 
-on:
-  pull_request:
-    types:
-      - review_requested
-      - review_submitted
-      - synchronize
-  pull_request_target:
-    types:
-      - labeled
-      - unlabeled
-
+on: 
+ workflow_dispatch
+  
 jobs:
   check-approvals:
     if: contains(github.event.pull_request.labels.*.name, 'requires-2-approvals')
